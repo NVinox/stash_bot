@@ -1,0 +1,21 @@
+{
+	"scripts": {
+		"start": "npm run build && node ./build/index",
+		"dev": "npx nodemon",
+		"build": "tsc"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.25.1",
+		"@types/dotenv": "^6.1.1",
+		"@types/node": "^22.15.3",
+		"eslint": "^9.25.1",
+		"globals": "^16.0.0",
+		"nodemon": "^3.1.10",
+		"typescript": "^5.8.3",
+		"typescript-eslint": "^8.31.1"
+	},
+	"dependencies": {
+		"dotenv": "^16.5.0",
+		"telegraf": "^4.16.3"
+	}
+}

@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  node:
+    restart: always
+    container_name: ${PROJECT_NAME}_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - ${NODE_PORT}:3000
+    volumes:
+      - ./:/var/www/stash_bot
+    tty: true
