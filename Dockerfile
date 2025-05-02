@@ -4,6 +4,7 @@ WORKDIR /var/www
 
 RUN mkdir stash_bot
 RUN npm install typescript -g
+RUN npm install rimraf -g
 
 WORKDIR /var/www/stash_bot
 
