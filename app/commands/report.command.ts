@@ -6,6 +6,8 @@ import { IBotContext } from "../context/context.interface"
 
 import { REPORT_COMMAND_TEXT } from "../constants/commands.constants"
 
+import { ReportKeyboard } from "../buttons/keyboards/report.keyboard"
+
 export class ReportCommand extends Command {
   constructor(bot: Telegraf<IBotContext>) {
     super(bot)
@@ -16,6 +18,6 @@ export class ReportCommand extends Command {
   }
 
   private async sendCommandMessage(ctx: IBotContext) {
-    return await ctx.reply("Report command")
+    return await ctx.reply("Report command", new ReportKeyboard().get())
   }
 }

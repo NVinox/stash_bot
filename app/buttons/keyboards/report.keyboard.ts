@@ -3,11 +3,14 @@ import { ReplyKeyboardMarkup } from "telegraf/typings/core/types/typegram"
 
 import { IKeyboard } from "./keyboard.interface"
 
-import { MAKE_EXPENSE, MAKE_INCOME } from "../../constants/keyboards.constants"
+import {
+  TEXT_FORMAT,
+  DOCUMENT_FORMAT,
+} from "../../constants/keyboards.constants"
 
-export class StartKeyboard implements IKeyboard {
+export class ReportKeyboard implements IKeyboard {
   get(): Markup.Markup<ReplyKeyboardMarkup> {
-    return Markup.keyboard([[MAKE_EXPENSE, MAKE_INCOME]])
+    return Markup.keyboard([[TEXT_FORMAT, DOCUMENT_FORMAT]])
       .resize(true)
       .oneTime(true)
   }
