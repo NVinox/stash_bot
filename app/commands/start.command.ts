@@ -4,6 +4,8 @@ import { Command } from "./command.class"
 
 import { IBotContext } from "../context/context.interface"
 
+import { StartKeyboard } from "../buttons/keyboards/start.keyboard"
+
 export class StartCommand extends Command {
   constructor(bot: Telegraf<IBotContext>) {
     super(bot)
@@ -14,6 +16,6 @@ export class StartCommand extends Command {
   }
 
   private async start(ctx: IBotContext) {
-    return await ctx.reply("Start command")
+    return await ctx.reply("Start command", new StartKeyboard().get())
   }
 }
