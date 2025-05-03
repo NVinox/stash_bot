@@ -7,6 +7,10 @@ import { ConfigService } from "./config/config.service"
 
 import { Command } from "./commands/command.class"
 import { StartCommand } from "./commands/start.command"
+import { InfoCommand } from "./commands/info.command"
+import { ReportCommand } from "./commands/report.command"
+import { CategoriesCommand } from "./commands/categories.command"
+
 import { CommandsButtons } from "./buttons/commands/commands.buttons"
 
 class Bot {
@@ -20,7 +24,12 @@ class Bot {
   }
 
   init() {
-    this.commands = [new StartCommand(this.bot)]
+    this.commands = [
+      new StartCommand(this.bot),
+      new InfoCommand(this.bot),
+      new ReportCommand(this.bot),
+      new CategoriesCommand(this.bot),
+    ]
 
     for (const command of this.commands) {
       command.handle()

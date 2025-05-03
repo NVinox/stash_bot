@@ -13,7 +13,7 @@ export class StartCommand extends Command {
     this.bot.start(this.start)
   }
 
-  async start(ctx: IBotContext) {
-    return await ctx.reply("Init bot")
+  private async start(ctx: IBotContext) {
+    return await ctx.reply("Start command")
   }
 }
