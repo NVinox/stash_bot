@@ -7,6 +7,7 @@ import { ConfigService } from "./config/config.service"
 
 import { Command } from "./commands/command.class"
 import { StartCommand } from "./commands/start.command"
+import { CommandsButtons } from "./buttons/commands/commands.buttons"
 
 class Bot {
   bot: Telegraf<IBotContext>
@@ -15,6 +16,7 @@ class Bot {
   constructor(private readonly configService: IConfigService) {
     this.bot = new Telegraf<IBotContext>(this.configService.get("TOKEN"))
     this.bot.use(session())
+    this.bot.telegram.setMyCommands(new CommandsButtons().get())
   }
 
   init() {
