@@ -7,7 +7,7 @@ import { ConfigService } from "./config/config.service"
 
 import { Command } from "./commands/command.class"
 import { StartCommand } from "./commands/start.command"
-import { InfoCommand } from "./commands/info.command"
+import { HelpCommand } from "./commands/help.command"
 import { ReportCommand } from "./commands/report.command"
 import { CategoriesCommand } from "./commands/categories.command"
 
@@ -26,7 +26,7 @@ class Bot {
   init() {
     this.commands = [
       new StartCommand(this.bot),
-      new InfoCommand(this.bot),
+      new HelpCommand(this.bot),
       new ReportCommand(this.bot),
       new CategoriesCommand(this.bot),
     ]

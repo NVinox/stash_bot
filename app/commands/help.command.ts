@@ -4,15 +4,13 @@ import { Command } from "./command.class"
 
 import { IBotContext } from "../context/context.interface"
 
-import { INFO_COMMAND_TEXT } from "../constants/commands.constants"
-
-export class InfoCommand extends Command {
+export class HelpCommand extends Command {
   constructor(bot: Telegraf<IBotContext>) {
     super(bot)
   }
 
   handle(): void {
-    this.bot.command(INFO_COMMAND_TEXT, this.sendCommandMessage)
+    this.bot.help(this.sendCommandMessage)
   }
 
   private async sendCommandMessage(ctx: IBotContext) {
