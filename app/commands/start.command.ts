@@ -6,16 +6,23 @@ import { IBotContext } from "../context/context.interface"
 
 import { StartKeyboard } from "../buttons/keyboards/start.keyboard"
 
+import { StartMessage } from "../messages/commands/start.message"
+
 export class StartCommand extends Command {
   constructor(bot: Telegraf<IBotContext>) {
     super(bot)
   }
 
   handle(): void {
-    this.bot.start(this.start)
+    this.bot.start(this.sendCommandMessage)
   }
 
-  private async start(ctx: IBotContext) {
-    return await ctx.reply("Start command", new StartKeyboard().get())
+  private async sendCommandMessage(ctx: IBotContext) {
+    const userName = ctx.message?.from.first_name
+
+    return await ctx.reply(new StartMessage().getHTML(userName), {
+      ...new StartKeyboard().get(),
+      parse_mode: "HTML",
+    })
   }
 }
