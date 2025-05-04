@@ -1,3 +1,10 @@
+import {
+  START_GREETING,
+  START_FIRST_LINE,
+  START_SECOND_LINE,
+  START_THIRD_LINE,
+} from "../../constants/messages.constants"
+
 interface IStartMessages {
   getHTML(userName?: string): string
 }
@@ -5,15 +12,9 @@ interface IStartMessages {
 export class StartMessage implements IStartMessages {
   getHTML(userName?: string): string {
     const title = userName
-      ? `Приветствуем вас, <b>${userName}</b>!`
-      : "Приветствуем вас!"
-    const firstLine =
-      "Этот бот поможет вам вести учет ваших финансовых средств."
-    const secondLine =
-      "Что умеет этот бот:\n- Добавлять записи финансовых операций по категориям;\n- Генерировать отчеты за различные периоды в разных форматах"
-    const thirdLine =
-      "Перед использованием рекомендуем ознакомиться с инструкцией пользования сервисом - <a>/help</a>"
+      ? `${START_GREETING}, <b>${userName}</b>!`
+      : `${START_GREETING}!`
 
-    return `${title}\n\n${firstLine}\n\n${secondLine}\n\n${thirdLine}`
+    return `${title}\n\n${START_FIRST_LINE}\n\n${START_SECOND_LINE}\n\n${START_THIRD_LINE}`
   }
 }
