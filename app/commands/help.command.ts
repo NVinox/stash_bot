@@ -4,6 +4,8 @@ import { Command } from "./command.class"
 
 import { IBotContext } from "../context/context.interface"
 
+import { HelpMessage } from "../messages/commands/help.message"
+
 export class HelpCommand extends Command {
   constructor(bot: Telegraf<IBotContext>) {
     super(bot)
@@ -14,6 +16,8 @@ export class HelpCommand extends Command {
   }
 
   private async sendCommandMessage(ctx: IBotContext) {
-    return await ctx.reply("Info command")
+    return await ctx.reply(new HelpMessage().getHTML(), {
+      parse_mode: "HTML",
+    })
   }
 }
