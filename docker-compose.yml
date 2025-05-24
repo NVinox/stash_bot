@@ -12,3 +12,24 @@ services:
     volumes:
       - ./:/var/www/stash_bot
     tty: true
+    networks:
+      - stash_bot
+  db:
+    image: mysql:8.4.5
+    container_name: ${DATABASE_CONTAINER_NAME}_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - stash_bot
+
+networks:
+  stash_bot:
+    driver: bridge
