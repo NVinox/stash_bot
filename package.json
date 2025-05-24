@@ -1,4 +1,7 @@
 {
+  "name": "stash_bot",
+  "private": true,
+  "version": "1.0.0",
   "scripts": {
     "start": "npm run build && node ./build/index",
     "dev": "npx nodemon",
