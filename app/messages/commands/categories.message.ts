@@ -1,4 +1,4 @@
-import { CATEGORIES_START_MESSAGE } from "../../constants/messages.constants"
+import { CATEGORIES_START_MESSAGE } from "../../constants/scenes.constants"
 
 interface ICategoriesMessages {
   getIntroductionHTML(): string
