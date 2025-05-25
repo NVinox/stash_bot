@@ -1,0 +1,1 @@
+export const INTERNAL_ERROR_TEXT = "Упс, произошла ошибка. Попробуйте еще раз."

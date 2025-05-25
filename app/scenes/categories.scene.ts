@@ -3,6 +3,7 @@ import { IBotContext } from "../context/context.interface"
 import { CategoriesMessage } from "../messages/commands/categories.message"
 import { CategoiriesKeyboard } from "../buttons/keyboards/categories.keyboard"
 import { CATEGORIES_INPUT_NAME } from "../constants/scenes.constants"
+import { ErrorHelper } from "../helpers/errors.helper"
 
 export class CotegoriesScene {
   getScene() {
@@ -21,24 +22,39 @@ export class CotegoriesScene {
   }
 
   private async start(ctx: IBotContext) {
-    await ctx.reply(new CategoriesMessage().getIntroductionHTML(), {
-      ...new CategoiriesKeyboard().get(),
-      parse_mode: "HTML",
-    })
-    return await ctx.wizard.next()
+    try {
+      await ctx.reply(new CategoriesMessage().getIntroductionHTML(), {
+        ...new CategoiriesKeyboard().get(),
+        parse_mode: "HTML",
+      })
+      return await ctx.wizard.next()
+    } catch (error) {
+      console.log(error)
+      await new ErrorHelper().sendWizardSceneError(ctx)
+    }
   }
 
   private async setCategoryType(ctx: IBotContext) {
-    ctx.scene.session.state.categoryType = ctx.text
+    try {
+      ctx.scene.session.state.categoryType = ctx.text
 
-    await ctx.reply(CATEGORIES_INPUT_NAME, { parse_mode: "HTML" })
-    return await ctx.wizard.next()
+      await ctx.reply(CATEGORIES_INPUT_NAME, { parse_mode: "HTML" })
+      return await ctx.wizard.next()
+    } catch (error) {
+      console.log(error)
+      await new ErrorHelper().sendWizardSceneError(ctx)
+    }
   }
 
   private async setCategoryName(ctx: IBotContext) {
-    ctx.scene.session.state.categoryName = ctx.text
+    try {
+      ctx.scene.session.state.categoryName = ctx.text
 
-    await ctx.reply(JSON.stringify(ctx.scene.session.state))
-    return await ctx.scene.leave()
+      await ctx.reply(JSON.stringify(ctx.scene.session.state))
+      return await ctx.scene.leave()
+    } catch (error) {
+      console.log(error)
+      await new ErrorHelper().sendWizardSceneError(ctx)
+    }
   }
 }
