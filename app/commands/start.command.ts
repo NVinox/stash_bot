@@ -1,7 +1,6 @@
 import { Telegraf } from "telegraf"
 import { Command } from "./command.class"
 import { IBotContext } from "../context/context.interface"
-import { StartKeyboard } from "../buttons/keyboards/start.keyboard"
 import { StartMessage } from "../messages/commands/start.message"
 import { ErrorHelper } from "../helpers/errors.helper"
 
@@ -19,7 +18,6 @@ export class StartCommand extends Command {
 
     try {
       return await ctx.reply(new StartMessage().getHTML(userName), {
-        ...new StartKeyboard().get(),
         parse_mode: "HTML",
       })
     } catch (error) {
