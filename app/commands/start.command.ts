@@ -3,6 +3,7 @@ import { Command } from "./command.class"
 import { IBotContext } from "../context/context.interface"
 import { StartMessage } from "../messages/commands/start.message"
 import { ErrorHelper } from "../helpers/errors.helper"
+import { UserHelper } from "../helpers/user.helper"
 
 export class StartCommand extends Command {
   constructor(bot: Telegraf<IBotContext>) {
@@ -14,10 +15,10 @@ export class StartCommand extends Command {
   }
 
   private async clickCommand(ctx: IBotContext) {
-    const userName = ctx.message?.from.first_name!
+    const firstName = new UserHelper(ctx).getFirstName()
 
     try {
-      return await ctx.reply(new StartMessage().getHTML(userName), {
+      return await ctx.reply(new StartMessage().getHTML(firstName), {
         parse_mode: "HTML",
       })
     } catch (error) {
