@@ -10,11 +10,11 @@ export class StartCommand extends Command {
   }
 
   handle(): void {
-    this.bot.start(this.sendCommandMessage)
+    this.bot.start(this.clickCommand.bind(this))
   }
 
-  private async sendCommandMessage(ctx: IBotContext) {
-    const userName = ctx.message?.from.first_name
+  private async clickCommand(ctx: IBotContext) {
+    const userName = ctx.message?.from.first_name!
 
     try {
       return await ctx.reply(new StartMessage().getHTML(userName), {
