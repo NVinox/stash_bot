@@ -11,7 +11,7 @@ export class StartCommand extends Command {
   }
 
   handle(): void {
-    this.bot.start(this.clickCommand.bind(this))
+    this.bot.start(this.clickCommand)
   }
 
   private async clickCommand(ctx: IBotContext) {
