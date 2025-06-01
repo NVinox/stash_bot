@@ -11,12 +11,6 @@ import {
   REPORT_COMMAND_DESCRIPTION,
   OPERATION_COMMAND_DESCRIPTION,
   CATEGORIES_COMMAND_DESCRIPTION,
-  EDIT_CATEGORIES_COMMAND_DESCRIPTION,
-  DELETE_CATEGORIES_COMMAND_TEXT,
-  DELETE_CATEGORIES_COMMAND_DESCRIPTION,
-  EDIT_CATEGORIES_COMMAND_TEXT,
-  ADD_CATEGORIES_COMMAND_DESCRIPTION,
-  ADD_CATEGORIES_COMMAND_TEXT,
 } from "../../constants/commands.constants"
 
 export class CommandsButtons implements ICommands {
@@ -30,18 +24,6 @@ export class CommandsButtons implements ICommands {
       {
         command: CATEGORIES_COMMAND_TEXT,
         description: CATEGORIES_COMMAND_DESCRIPTION,
-      },
-      {
-        command: ADD_CATEGORIES_COMMAND_TEXT,
-        description: ADD_CATEGORIES_COMMAND_DESCRIPTION,
-      },
-      {
-        command: EDIT_CATEGORIES_COMMAND_TEXT,
-        description: EDIT_CATEGORIES_COMMAND_DESCRIPTION,
-      },
-      {
-        command: DELETE_CATEGORIES_COMMAND_TEXT,
-        description: DELETE_CATEGORIES_COMMAND_DESCRIPTION,
       },
       { command: HELP_COMMAND_TEXT, description: HELP_COMMAND_DESCRIPTION },
     ]
