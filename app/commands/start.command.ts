@@ -1,9 +1,9 @@
 import { Telegraf } from "telegraf"
 import { Command } from "./command.class"
 import { IBotContext } from "../context/context.interface"
-import { StartKeyboard } from "../buttons/keyboards/start.keyboard"
 import { StartMessage } from "../messages/commands/start.message"
 import { ErrorHelper } from "../helpers/errors.helper"
+import { UserHelper } from "../helpers/user.helper"
 
 export class StartCommand extends Command {
   constructor(bot: Telegraf<IBotContext>) {
@@ -11,15 +11,14 @@ export class StartCommand extends Command {
   }
 
   handle(): void {
-    this.bot.start(this.sendCommandMessage)
+    this.bot.start(this.clickCommand)
   }
 
-  private async sendCommandMessage(ctx: IBotContext) {
-    const userName = ctx.message?.from.first_name
+  private async clickCommand(ctx: IBotContext) {
+    const firstName = new UserHelper(ctx).getFirstName()
 
     try {
-      return await ctx.reply(new StartMessage().getHTML(userName), {
-        ...new StartKeyboard().get(),
+      return await ctx.reply(new StartMessage().getHTML(firstName), {
         parse_mode: "HTML",
       })
     } catch (error) {
