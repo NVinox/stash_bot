@@ -1,14 +1,16 @@
 import { Scenes } from "telegraf"
 import { IBotContext } from "../context/context.interface"
 import { CategoriesMessage } from "../messages/commands/categories.message"
-import { CategoiriesKeyboard } from "../buttons/keyboards/categories.keyboard"
-import { CATEGORIES_INPUT_NAME } from "../constants/scenes.constants"
 import { ErrorHelper } from "../helpers/errors.helper"
+import {
+  CATEDORIES_SCENE_ID,
+  CATEGORIES_INPUT_NAME,
+} from "../constants/scenes.constants"
 
 export class CotegoriesScene {
   getScene() {
     return new Scenes.WizardScene<IBotContext>(
-      "CATEGORIES_SCENE",
+      CATEDORIES_SCENE_ID,
       (ctx) => {
         this.start(ctx)
       },
@@ -24,7 +26,6 @@ export class CotegoriesScene {
   private async start(ctx: IBotContext) {
     try {
       await ctx.reply(new CategoriesMessage().getIntroductionHTML(), {
-        ...new CategoiriesKeyboard().get(),
         parse_mode: "HTML",
       })
       return await ctx.wizard.next()
