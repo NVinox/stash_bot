@@ -16,7 +16,7 @@ services:
       - stash_bot
   db:
     image: mysql:8.4.5
-    container_name: ${DATABASE_CONTAINER_NAME}_mysql
+    container_name: ${PROJECT_NAME}_mysql
     restart: always
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
