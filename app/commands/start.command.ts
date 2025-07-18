@@ -21,9 +21,9 @@ export class StartCommand extends Command {
       return await ctx.reply(new StartMessage().getHTML(firstName), {
         parse_mode: "HTML",
       })
-    } catch (error) {
+    } catch (error: unknown) {
       console.log(error)
-      await new ErrorHelper().sendInternalError(ctx)
+      await new ErrorHelper().sendInternalError(ctx, error)
     }
   }
 }

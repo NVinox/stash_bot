@@ -17,9 +17,9 @@ export class ReportCommand extends Command {
   private async sendCommandMessage(ctx: IBotContext) {
     try {
       return await ctx.reply("Report command", new ReportKeyboard().get())
-    } catch (error) {
+    } catch (error: unknown) {
       console.log(error)
-      await new ErrorHelper().sendInternalError(ctx)
+      await new ErrorHelper().sendInternalError(ctx, error)
     }
   }
 }

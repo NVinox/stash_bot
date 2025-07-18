@@ -19,7 +19,7 @@ export class OperationCommand extends Command {
       return await ctx.reply("Operation command", new OperationKeyboard().get())
     } catch (error) {
       console.log(error)
-      await new ErrorHelper().sendInternalError(ctx)
+      await new ErrorHelper().sendInternalError(ctx, error)
     }
   }
 }
