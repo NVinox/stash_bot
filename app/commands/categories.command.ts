@@ -16,9 +16,9 @@ export class CategoriesCommand extends Command {
   private async sendCommandMessage(ctx: IBotContext) {
     try {
       return await ctx.scene.enter("CATEGORIES_SCENE")
-    } catch (error) {
+    } catch (error: unknown) {
       console.log(error)
-      await new ErrorHelper().sendInternalError(ctx)
+      await new ErrorHelper().sendInternalError(ctx, error)
     }
   }
 }
