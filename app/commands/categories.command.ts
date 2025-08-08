@@ -17,7 +17,6 @@ export class CategoriesCommand extends Command {
     try {
       return await ctx.scene.enter("CATEGORIES_SCENE")
     } catch (error: unknown) {
-      console.log(error)
       await new ErrorHelper().sendInternalError(ctx, error)
     }
   }

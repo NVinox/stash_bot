@@ -18,11 +18,8 @@ export class StartCommand extends Command {
     const firstName = new UserHelper(ctx).getFirstName()
 
     try {
-      return await ctx.reply(new StartMessage().getHTML(firstName), {
-        parse_mode: "HTML",
-      })
+      return await ctx.replyWithHTML(new StartMessage().getHTML(firstName))
     } catch (error: unknown) {
-      console.log(error)
       await new ErrorHelper().sendInternalError(ctx, error)
     }
   }
