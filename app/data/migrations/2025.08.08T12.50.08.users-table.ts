@@ -1,30 +1,30 @@
-import { Sequelize, DataTypes } from "sequelize"
+import { Sequelize, DataType } from "sequelize-typescript"
 import type { MigrationFn } from "umzug"
 
 export const up: MigrationFn<Sequelize> = async ({ context: sequelize }) => {
   await sequelize.getQueryInterface().createTable("users", {
     id: {
-      type: DataTypes.BIGINT,
+      type: DataType.BIGINT,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
     telegramId: {
-      type: DataTypes.BIGINT,
+      type: DataType.BIGINT,
       unique: true,
       allowNull: false,
     },
     name: {
-      type: DataTypes.STRING,
+      type: DataType.STRING,
       allowNull: false,
     },
     createdAt: {
-      type: DataTypes.DATE,
+      type: DataType.DATE,
       allowNull: false,
       defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
     },
     updatedAt: {
-      type: DataTypes.DATE,
+      type: DataType.DATE,
       allowNull: false,
       defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
     },

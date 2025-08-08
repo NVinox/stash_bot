@@ -15,6 +15,8 @@ import { OperationCommand } from "./commands/operation.command"
 import { CommandsButtons } from "./buttons/commands/commands.buttons"
 import { CotegoriesScene } from "./scenes/categories.scene"
 
+import { DatabaseConnection } from "./database/connecttion.database"
+
 class Bot {
   private stage: Scenes.Stage<IBotContext, Scenes.SceneSessionData>
   bot: Telegraf<IBotContext>
@@ -25,7 +27,7 @@ class Bot {
     this.stage = new Scenes.Stage<IBotContext>([
       new CotegoriesScene().getScene(),
     ])
-    
+
     this.bot.use(session())
     this.bot.use(this.stage.middleware())
     this.bot.launch()
@@ -52,5 +54,8 @@ class Bot {
   }
 }
 
+const database = new DatabaseConnection(new ConfigService())
 const bot = new Bot(new ConfigService())
+
+database.connect()
 bot.init()

@@ -13,6 +13,7 @@ interface IError {
     error: unknown,
     isBack?: boolean
   ) => Promise<void>
+  connectionDataBaseError: (error: unknown) => void
 }
 
 export class ErrorHelper implements IError {
@@ -27,6 +28,10 @@ export class ErrorHelper implements IError {
     this.getLogger().error({ message: error })
     await ctx.reply(INTERNAL_ERROR_TEXT, { parse_mode: "HTML" })
     await ctx.scene.reenter()
+  }
+
+  connectionDataBaseError(error: unknown) {
+    console.log(error)
   }
 
   private getLogger(): Logger {
