@@ -11,6 +11,10 @@ export const up: MigrationFn<Sequelize> = async ({ context: sequelize }) => {
     userId: {
       type: DataType.BIGINT,
       allowNull: false,
+      references: {
+        model: "users",
+        key: "id",
+      },
     },
     title: {
       type: DataType.STRING,

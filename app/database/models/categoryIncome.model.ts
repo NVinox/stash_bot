@@ -4,22 +4,24 @@ import {
   DataType,
   CreatedAt,
   UpdatedAt,
+  BelongsTo,
   AllowNull,
-  Unique,
-  HasMany,
+  ForeignKey,
   Model,
+  Validate,
 } from "sequelize-typescript"
 
-import { IUserModel } from "../../interfaces/user.interface"
-import { CategoryIncome } from "./categoryIncome.model"
+import { User } from "./user.model"
+
 import { ICategoryModel } from "../../interfaces/category.interface"
+import { IUserModel } from "../../interfaces/user.interface"
 
 @Table({
-  tableName: "users",
-  modelName: "User",
+  tableName: "categories_income",
+  modelName: "CategoryIncome",
   timestamps: true,
 })
-export class User extends Model<IUserModel> {
+export class CategoryIncome extends Model<ICategoryModel> {
   @Column({
     type: DataType.BIGINT,
     primaryKey: true,
@@ -27,18 +29,19 @@ export class User extends Model<IUserModel> {
   })
   declare id: number
 
+  @ForeignKey(() => User)
   @AllowNull(false)
-  @Unique(true)
   @Column({
     type: DataType.BIGINT,
   })
-  declare telegramId: number
+  declare userId: number
 
   @AllowNull(false)
+  @Validate({ len: [1, 20] })
   @Column({
     type: DataType.STRING,
   })
-  declare name: string
+  declare title: string
 
   @AllowNull(false)
   @CreatedAt
@@ -48,6 +51,6 @@ export class User extends Model<IUserModel> {
   @UpdatedAt
   declare updatedAt: Date
 
-  @HasMany(() => CategoryIncome)
-  declare categoriesIncome: ICategoryModel[]
+  @BelongsTo(() => User)
+  declare user?: IUserModel
 }
