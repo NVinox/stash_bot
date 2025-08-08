@@ -1,9 +1,8 @@
-FROM node:23.11.0
+FROM node:22.17-alpine
 
 WORKDIR /var/www
 
 RUN mkdir stash_bot
-RUN npm install typescript@5.8.3 -g
 
 WORKDIR /var/www/stash_bot
 
