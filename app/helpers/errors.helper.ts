@@ -13,18 +13,25 @@ interface IError {
     error: unknown,
     isBack?: boolean
   ) => Promise<void>
+  connectionDataBaseError: (error: unknown) => void
 }
 
 export class ErrorHelper implements IError {
   async sendInternalError(ctx: IBotContext, error: unknown) {
+    console.log(error)
     this.getLogger().error({ message: error })
     return await ctx.reply(INTERNAL_ERROR_TEXT, { parse_mode: "HTML" })
   }
 
   async sendWizardSceneError(ctx: IBotContext, error: unknown) {
+    console.log(error)
     this.getLogger().error({ message: error })
     await ctx.reply(INTERNAL_ERROR_TEXT, { parse_mode: "HTML" })
     await ctx.scene.reenter()
+  }
+
+  connectionDataBaseError(error: unknown) {
+    console.log(error)
   }
 
   private getLogger(): Logger {
@@ -36,10 +43,27 @@ export class ErrorHelper implements IError {
       transports: [
         new transports.File({
           dirname: "logs",
-          filename: "error.log",
+          filename: this.createLoggerFileNameDate(),
           level: "error",
         }),
       ],
     })
+  }
+
+  private createLoggerFileNameDate(): string {
+    const currentDate = new Date()
+    const year = currentDate.getFullYear()
+    let day: number | string = currentDate.getDate()
+    let month: number | string = currentDate.getMonth() + 1
+
+    if (month < 10) {
+      month = `0${month}`
+    }
+
+    if (day < 10) {
+      day = `0${day}`
+    }
+
+    return `${day}.${month}.${year}.log`
   }
 }

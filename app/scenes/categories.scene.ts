@@ -29,7 +29,6 @@ export class CotegoriesScene {
       })
       return await ctx.wizard.next()
     } catch (error: unknown) {
-      console.log(error)
       await new ErrorHelper().sendWizardSceneError(ctx, error)
     }
   }
@@ -41,7 +40,6 @@ export class CotegoriesScene {
       await ctx.reply(CATEGORIES_INPUT_NAME, { parse_mode: "HTML" })
       return await ctx.wizard.next()
     } catch (error: unknown) {
-      console.log(error)
       await new ErrorHelper().sendWizardSceneError(ctx, error)
     }
   }
@@ -53,7 +51,6 @@ export class CotegoriesScene {
       await ctx.reply(JSON.stringify(ctx.scene.session.state))
       return await ctx.scene.leave()
     } catch (error: unknown) {
-      console.log(error)
       await new ErrorHelper().sendWizardSceneError(ctx, error)
     }
   }

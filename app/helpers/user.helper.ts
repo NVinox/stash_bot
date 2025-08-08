@@ -1,11 +1,11 @@
 import { IBotContext } from "../context/context.interface"
-import { IUser } from "../interfaces/user.interface"
+import { IUserTelegram } from "../interfaces/user.interface"
 
 interface IUserHelper {
   getId: () => number
   getFirstName: () => string
   getUserName: () => string
-  getUserDTO: () => IUser
+  getUserDTO: () => IUserTelegram
 }
 
 export class UserHelper implements IUserHelper {
@@ -31,7 +31,7 @@ export class UserHelper implements IUserHelper {
     return this.userName
   }
 
-  getUserDTO(): IUser {
+  getUserDTO(): IUserTelegram {
     return {
       id: this.getId(),
       name: this.getUserName(),

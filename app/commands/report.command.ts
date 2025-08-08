@@ -18,7 +18,6 @@ export class ReportCommand extends Command {
     try {
       return await ctx.reply("Report command", new ReportKeyboard().get())
     } catch (error: unknown) {
-      console.log(error)
       await new ErrorHelper().sendInternalError(ctx, error)
     }
   }

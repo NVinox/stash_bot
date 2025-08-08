@@ -19,7 +19,6 @@ export class HelpCommand extends Command {
         parse_mode: "HTML",
       })
     } catch (error: unknown) {
-      console.log(error)
       await new ErrorHelper().sendInternalError(ctx, error)
     }
   }
