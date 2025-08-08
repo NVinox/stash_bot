@@ -43,14 +43,16 @@ export class CategoryIncome extends Model<ICategoryModel> {
   })
   declare title: string
 
-  @AllowNull(false)
   @CreatedAt
   declare createdAt: Date
 
-  @AllowNull(false)
   @UpdatedAt
   declare updatedAt: Date
 
   @BelongsTo(() => User)
   declare user?: IUserModel
+
+  toJSON() {
+    return { ...this.get() }
+  }
 }
