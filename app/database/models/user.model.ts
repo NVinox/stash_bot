@@ -12,7 +12,7 @@ import {
 
 import { IUserModel } from "../../interfaces/user.interface"
 import { CategoryIncome } from "./categoryIncome.model"
-import { ICategoryModel } from "../../interfaces/category.interface"
+// import { ICategoryModel } from "../../interfaces/category.interface"
 import { CategoryExpense } from "./categoryExpense.model"
 
 @Table({
@@ -48,12 +48,10 @@ export class User extends Model<IUserModel> {
   declare updatedAt: Date
 
   @HasMany(() => CategoryIncome)
-  declare categoriesIncome: ICategoryModel[]
+  declare categoriesIncome?: CategoryIncome[]
 
   @HasMany(() => CategoryExpense)
-  declare categoriesExpense: ICategoryModel[]
+  declare categoriesExpense?: CategoryExpense[]
 
-  toJSON() {
-    return { ...this.get() }
-  }
+  getOne() {}
 }

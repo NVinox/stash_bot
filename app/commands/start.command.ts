@@ -5,6 +5,8 @@ import { StartMessage } from "../messages/commands/start.message"
 import { ErrorHelper } from "../helpers/errors.helper"
 import { UserHelper } from "../helpers/user.helper"
 import { User } from "../database/models/user.model"
+import { CategoryIncome } from "../database/models/categoryIncome.model"
+import { CategoryExpense } from "../database/models/categoryExpense.model"
 
 export class StartCommand extends Command {
   constructor(bot: Telegraf<IBotContext>) {
@@ -20,7 +22,10 @@ export class StartCommand extends Command {
       const firstName = new UserHelper(ctx).getFirstName()
       const userInDB = await User.findOne({
         where: { telegramId: new UserHelper(ctx).getId() },
+        include: [CategoryIncome, CategoryExpense],
       })
+
+      console.log(userInDB?.toJSON())
 
       if (!userInDB) {
         await User.create({

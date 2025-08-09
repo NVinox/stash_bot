@@ -14,7 +14,6 @@ import {
 import { User } from "./user.model"
 
 import { ICategoryModel } from "../../interfaces/category.interface"
-import { IUserModel } from "../../interfaces/user.interface"
 
 @Table({
   tableName: "categories_income",
@@ -50,9 +49,5 @@ export class CategoryIncome extends Model<ICategoryModel> {
   declare updatedAt: Date
 
   @BelongsTo(() => User)
-  declare user?: IUserModel
-
-  toJSON() {
-    return { ...this.get() }
-  }
+  declare user?: User
 }
