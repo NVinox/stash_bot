@@ -20,6 +20,8 @@ import { CategoryExpense } from "./categoryExpense.model"
   timestamps: true,
 })
 export class User extends Model<IUserModel> {
+  @AllowNull(false)
+  @Unique(true)
   @Column({
     type: DataType.BIGINT,
     primaryKey: true,
@@ -28,17 +30,10 @@ export class User extends Model<IUserModel> {
   declare id: number
 
   @AllowNull(false)
-  @Unique(true)
-  @Column({
-    type: DataType.BIGINT,
-  })
-  declare telegramId: number
-
-  @AllowNull(false)
   @Column({
     type: DataType.STRING,
   })
-  declare name: string
+  declare nickname: string
 
   @CreatedAt
   declare createdAt: Date

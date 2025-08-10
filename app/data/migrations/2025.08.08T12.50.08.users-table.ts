@@ -9,14 +9,10 @@ export const up: MigrationFn<Sequelize> = async ({ context: sequelize }) => {
       id: {
         type: DataType.BIGINT,
         primaryKey: true,
-        autoIncrement: true,
-      },
-      telegramId: {
-        type: DataType.BIGINT,
         unique: true,
         allowNull: false,
       },
-      name: {
+      nickname: {
         type: DataType.STRING,
         allowNull: false,
       },
