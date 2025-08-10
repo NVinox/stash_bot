@@ -5,16 +5,27 @@ export const up: MigrationFn<Sequelize> = async ({ context: sequelize }) => {
   const transaction = await sequelize.transaction()
 
   try {
-    await sequelize.getQueryInterface().createTable("users", {
+    await sequelize.getQueryInterface().createTable("expenses", {
       id: {
         type: DataType.BIGINT,
         primaryKey: true,
-        unique: true,
+        autoIncrement: true,
+      },
+      categoryExpenseId: {
+        type: DataType.BIGINT,
+        allowNull: false,
+        references: {
+          model: "categories_expense",
+          key: "id",
+        },
+      },
+      amount: {
+        type: DataType.FLOAT,
         allowNull: false,
       },
-      nickname: {
+      comment: {
         type: DataType.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       createdAt: {
         type: DataType.DATE,
@@ -29,11 +40,12 @@ export const up: MigrationFn<Sequelize> = async ({ context: sequelize }) => {
     })
 
     await transaction.commit()
-  } catch (error) {
+  } catch (error: unknown) {
     console.log(error)
     await transaction.rollback()
   }
 }
+
 export const down: MigrationFn<Sequelize> = async ({ context: sequelize }) => {
-  await sequelize.getQueryInterface().dropTable("users")
+  await sequelize.getQueryInterface().dropTable("expenses")
 }

@@ -4,9 +4,8 @@ export interface IUserTelegram {
 }
 
 export interface IUserModel {
-  id?: number
-  telegramId: number
-  name: string
+  id: number
+  nickname: string
   createdAt?: string
   updatedAt?: string
 }
