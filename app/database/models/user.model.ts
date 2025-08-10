@@ -8,6 +8,7 @@ import {
   Unique,
   HasMany,
   Model,
+  PrimaryKey,
 } from "sequelize-typescript"
 
 import { IUserModel } from "../../interfaces/user.interface"
@@ -22,10 +23,9 @@ import { CategoryExpense } from "./categoryExpense.model"
 export class User extends Model<IUserModel> {
   @AllowNull(false)
   @Unique(true)
+  @PrimaryKey
   @Column({
     type: DataType.BIGINT,
-    primaryKey: true,
-    autoIncrement: true,
   })
   declare id: number
 
@@ -42,8 +42,8 @@ export class User extends Model<IUserModel> {
   declare updatedAt: Date
 
   @HasMany(() => CategoryIncome)
-  declare categoriesIncome?: CategoryIncome[]
+  declare categoriesIncome: CategoryIncome[]
 
   @HasMany(() => CategoryExpense)
-  declare categoriesExpense?: CategoryExpense[]
+  declare categoriesExpense: CategoryExpense[]
 }

@@ -9,6 +9,8 @@ import {
   ForeignKey,
   Model,
   Validate,
+  AutoIncrement,
+  PrimaryKey,
 } from "sequelize-typescript"
 
 import { User } from "./user.model"
@@ -21,10 +23,10 @@ import { ICategoryModel } from "../../interfaces/category.interface"
   timestamps: true,
 })
 export class CategoryIncome extends Model<ICategoryModel> {
+  @AutoIncrement
+  @PrimaryKey
   @Column({
     type: DataType.BIGINT,
-    primaryKey: true,
-    autoIncrement: true,
   })
   declare id: number
 

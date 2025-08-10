@@ -7,13 +7,17 @@ import {
   BelongsTo,
   AllowNull,
   ForeignKey,
+  AutoIncrement,
+  PrimaryKey,
   Model,
   Validate,
+  HasMany,
 } from "sequelize-typescript"
 
 import { User } from "./user.model"
 
 import { ICategoryModel } from "../../interfaces/category.interface"
+import { Expense } from "./expense.model"
 
 @Table({
   tableName: "categories_expense",
@@ -21,10 +25,10 @@ import { ICategoryModel } from "../../interfaces/category.interface"
   timestamps: true,
 })
 export class CategoryExpense extends Model<ICategoryModel> {
+  @AutoIncrement
+  @PrimaryKey
   @Column({
     type: DataType.BIGINT,
-    primaryKey: true,
-    autoIncrement: true,
   })
   declare id: number
 
@@ -50,4 +54,7 @@ export class CategoryExpense extends Model<ICategoryModel> {
 
   @BelongsTo(() => User)
   declare user?: User
+
+  @HasMany(() => Expense)
+  declare expenses: Expense[]
 }
