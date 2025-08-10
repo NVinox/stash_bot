@@ -3,6 +3,8 @@ import { ConfigService } from "../config/config.service"
 import { ErrorHelper } from "../helpers/errors.helper"
 
 import { User } from "./models/user.model"
+import { CategoryIncome } from "./models/categoryIncome.model"
+import { CategoryExpense } from "./models/categoryExpense.model"
 
 export class DatabaseConnection {
   constructor(private readonly configService: ConfigService) {}
@@ -18,7 +20,7 @@ export class DatabaseConnection {
       })
 
       await sequelize.authenticate()
-      sequelize.addModels([User])
+      sequelize.addModels([User, CategoryIncome, CategoryExpense])
     } catch (error: unknown) {
       new ErrorHelper().connectionDataBaseError(error)
     }

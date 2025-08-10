@@ -4,10 +4,15 @@ import {
   DataType,
   CreatedAt,
   UpdatedAt,
+  AllowNull,
+  Unique,
+  HasMany,
   Model,
 } from "sequelize-typescript"
 
 import { IUserModel } from "../../interfaces/user.interface"
+import { CategoryIncome } from "./categoryIncome.model"
+import { CategoryExpense } from "./categoryExpense.model"
 
 @Table({
   tableName: "users",
@@ -22,16 +27,16 @@ export class User extends Model<IUserModel> {
   })
   declare id: number
 
+  @AllowNull(false)
+  @Unique(true)
   @Column({
     type: DataType.BIGINT,
-    unique: true,
-    allowNull: false,
   })
   declare telegramId: number
 
+  @AllowNull(false)
   @Column({
     type: DataType.STRING,
-    allowNull: false,
   })
   declare name: string
 
@@ -40,4 +45,10 @@ export class User extends Model<IUserModel> {
 
   @UpdatedAt
   declare updatedAt: Date
+
+  @HasMany(() => CategoryIncome)
+  declare categoriesIncome?: CategoryIncome[]
+
+  @HasMany(() => CategoryExpense)
+  declare categoriesExpense?: CategoryExpense[]
 }
