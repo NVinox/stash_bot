@@ -11,9 +11,11 @@ import {
   Validate,
   AutoIncrement,
   PrimaryKey,
+  HasMany,
 } from "sequelize-typescript"
 
 import { User } from "./user.model"
+import { Income } from "./income.model"
 
 import { ICategoryModel } from "../../interfaces/category.interface"
 
@@ -52,4 +54,7 @@ export class CategoryIncome extends Model<ICategoryModel> {
 
   @BelongsTo(() => User)
   declare user?: User
+
+  @HasMany(() => Income)
+  declare income: Income[]
 }
