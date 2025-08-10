@@ -25,8 +25,6 @@ export class StartCommand extends Command {
         include: [CategoryIncome, CategoryExpense],
       })
 
-      console.log(userInDB?.toJSON())
-
       if (!userInDB) {
         await User.create({
           telegramId: new UserHelper(ctx).getId(),
