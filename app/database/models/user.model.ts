@@ -12,7 +12,6 @@ import {
 
 import { IUserModel } from "../../interfaces/user.interface"
 import { CategoryIncome } from "./categoryIncome.model"
-// import { ICategoryModel } from "../../interfaces/category.interface"
 import { CategoryExpense } from "./categoryExpense.model"
 
 @Table({
@@ -52,6 +51,4 @@ export class User extends Model<IUserModel> {
 
   @HasMany(() => CategoryExpense)
   declare categoriesExpense?: CategoryExpense[]
-
-  getOne() {}
 }
