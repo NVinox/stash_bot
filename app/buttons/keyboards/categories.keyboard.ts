@@ -10,7 +10,7 @@ import {
 } from "../../constants/keyboards.constants"
 
 export class CategoiriesKeyboard {
-  get(): Markup.Markup<ReplyKeyboardMarkup> {
+  static get(): Markup.Markup<ReplyKeyboardMarkup> {
     return Markup.keyboard([[EDIT_CATEGORY, DELETE_CATEGORY], [ADD_CATEGORY]])
       .resize(true)
       .oneTime(true)

@@ -1,5 +1,5 @@
 import { Telegraf } from "telegraf"
-import { Command } from "./command.class"
+import { Command } from "../abstract/command.abstract"
 import { IBotContext } from "../context/context.interface"
 import { REPORT_COMMAND_TEXT } from "../constants/commands.constants"
 import { ReportKeyboard } from "../buttons/keyboards/report.keyboard"

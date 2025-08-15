@@ -21,5 +21,5 @@ export const HELP_THIRD_LINE = `<a>/${CATEGORIES_COMMAND_TEXT}</a> - добав�
 export const HELP_FOURTH_LINE = `<a>/${REPORT_COMMAND_TEXT}</a> - вывести отчет.\nКоманда служит для вывода наглядного отчета передвижения ваших денежных средств.`
 export const HELP_FINAL_LINE = "Желаем вам приятного пользования!"
 
-export const CATEGORY_INCOME_TEXT = "Категории расходов"
-export const CATEGORY_EXPENSES_TEXT = "Категории доходов"
+export const CATEGORY_INCOME_TEXT = "Категории доходов"
+export const CATEGORY_EXPENSES_TEXT = "Категории расходов"

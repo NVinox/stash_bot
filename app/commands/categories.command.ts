@@ -1,9 +1,10 @@
 import { Telegraf } from "telegraf"
-import { Command } from "./command.class"
+import { Command } from "../abstract/command.abstract"
 import { IBotContext } from "../context/context.interface"
 import { UserHelper } from "../helpers/user.helper"
 import { ErrorHelper } from "../helpers/errors.helper"
 import { CategoryService } from "../services/category.service"
+import { CategoiriesKeyboard } from "../buttons/keyboards/categories.keyboard"
 import { ADD_CATEGORY_SCENE_ID } from "../constants/scenes.constants"
 import { CATEGORIES_COMMAND_TEXT } from "../constants/commands.constants"
 
@@ -26,7 +27,10 @@ export class CategoriesCommand extends Command {
         const categoryMessage = await CategoryService.getUserCategories(
           new UserHelper(ctx).getId()
         )
-        return await ctx.replyWithHTML(categoryMessage)
+        return await ctx.replyWithHTML(
+          categoryMessage,
+          CategoiriesKeyboard.get()
+        )
       } else {
         return await ctx.scene.enter(ADD_CATEGORY_SCENE_ID)
       }
