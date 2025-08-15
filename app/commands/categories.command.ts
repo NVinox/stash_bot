@@ -1,8 +1,11 @@
 import { Telegraf } from "telegraf"
 import { Command } from "./command.class"
 import { IBotContext } from "../context/context.interface"
-import { CATEGORIES_COMMAND_TEXT } from "../constants/commands.constants"
+import { UserHelper } from "../helpers/user.helper"
 import { ErrorHelper } from "../helpers/errors.helper"
+import { CategoryService } from "../services/category.service"
+import { ADD_CATEGORY_SCENE_ID } from "../constants/scenes.constants"
+import { CATEGORIES_COMMAND_TEXT } from "../constants/commands.constants"
 
 export class CategoriesCommand extends Command {
   constructor(bot: Telegraf<IBotContext>) {
@@ -15,7 +18,18 @@ export class CategoriesCommand extends Command {
 
   private async sendCommandMessage(ctx: IBotContext) {
     try {
-      return await ctx.scene.enter("CATEGORIES_SCENE")
+      const isHasCategories = await CategoryService.isHasUserCategories(
+        new UserHelper(ctx).getId()
+      )
+
+      if (isHasCategories) {
+        const categoryMessage = await CategoryService.getUserCategories(
+          new UserHelper(ctx).getId()
+        )
+        return await ctx.replyWithHTML(categoryMessage)
+      } else {
+        return await ctx.scene.enter(ADD_CATEGORY_SCENE_ID)
+      }
     } catch (error: unknown) {
       await new ErrorHelper().sendInternalError(ctx, error)
     }

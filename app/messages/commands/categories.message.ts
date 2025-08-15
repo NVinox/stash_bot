@@ -1,11 +1,5 @@
-import { CATEGORIES_START_MESSAGE } from "../../constants/scenes.constants"
-
-interface ICategoriesMessages {
-  getIntroductionHTML(): string
-}
-
-export class CategoriesMessage implements ICategoriesMessages {
-  getIntroductionHTML() {
-    return CATEGORIES_START_MESSAGE
+export class CategoriesMessage {
+  static getSuccessCreateCategoryMessage(title: string) {
+    return `Категория <b>${title}</b> была успешно создана`
   }
 }

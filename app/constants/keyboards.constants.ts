@@ -17,3 +17,5 @@ export const DOCUMENT_FORMAT = `Документ ${EMOJI_DOCUMENT}`
 export const EDIT_CATEGORY = `Редактировать ${EMOJI_PEN}`
 export const DELETE_CATEGORY = `Удалить ${EMOJI_STOP}`
 export const ADD_CATEGORY = `Добавить ${EMOJI_PLUS}`
+export const CATEGORY_TYPE_EXPENSES = "Расходы"
+export const CATEGORY_TYPE_INCOME = "Доходы"

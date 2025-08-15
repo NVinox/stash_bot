@@ -12,8 +12,9 @@ import { ReportCommand } from "./commands/report.command"
 import { CategoriesCommand } from "./commands/categories.command"
 import { OperationCommand } from "./commands/operation.command"
 
+import { AddCategoryScene } from "./scenes/addCategory.scene"
+
 import { CommandsButtons } from "./buttons/commands/commands.buttons"
-import { CotegoriesScene } from "./scenes/categories.scene"
 
 import { DatabaseConnection } from "./database/connecttion.database"
 
@@ -25,7 +26,7 @@ class Bot {
   constructor(private readonly configService: IConfigService) {
     this.bot = new Telegraf<IBotContext>(this.configService.get("TOKEN"))
     this.stage = new Scenes.Stage<IBotContext>([
-      new CotegoriesScene().getScene(),
+      new AddCategoryScene().getScene(),
     ])
 
     this.bot.use(session())
