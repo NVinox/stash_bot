@@ -1,6 +1,7 @@
 import { CategoryIncome } from "../database/models/categoryIncome.model"
 import { CategoryExpense } from "../database/models/categoryExpense.model"
 import { User } from "../database/models/user.model"
+import { StringHelper } from "../helpers/string.helper"
 import { ICreateCategory } from "../interfaces/category.interface"
 import { CATEGORY_TYPE_EXPENSES } from "../constants/keyboards.constants"
 import {
@@ -9,8 +10,10 @@ import {
 } from "../constants/messages.constants"
 
 export class CategoryService {
+  //TODO: разделить метод на раздельное создание категорий дохода и расхода
   static async createCategory(category: ICreateCategory): Promise<void> {
-    const { type, title, userId } = category
+    const { type, userId } = category
+    const title = StringHelper.capitalizeFirstLetter(category.title)
 
     if (type === CATEGORY_TYPE_EXPENSES) {
       await CategoryExpense.create({ title, userId })
