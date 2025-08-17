@@ -3,19 +3,23 @@ import { WizardScene } from "telegraf/typings/scenes"
 import { AScene } from "../abstract/scene.abstract"
 import { IBotContext } from "../context/context.interface"
 import { AsyncMessage } from "../helpers/asyncMessage.helper"
+import { ValidatorHelper } from "../helpers/validator.helper"
 import { ErrorHelper } from "../helpers/errors.helper"
 import { UserHelper } from "../helpers/user.helper"
 import { CategoiriesKeyboard } from "../buttons/keyboards/categories.keyboard"
 import { CategoryService } from "../services/category.service"
 import { CategoriesMessage } from "../messages/commands/categories.message"
+import { ValidatorMessage } from "../messages/validator.message"
 import {
   ADD_CATEGORIES_PROGRESS_TEXT,
   ADD_CATEGORY_SCENE_ID,
   CATEGORIES_CANCEL_TEXT,
   CATEGORIES_INPUT_NAME,
   CATEGORIES_START_MESSAGE,
+  NOT_EXIST_CATEGORY,
 } from "../constants/scenes.constants"
 import { CANCEL_TEXT } from "../constants/keyboards.constants"
+import { IS_TEXT_NOT_NUMBER } from "../constants/validator.constants"
 
 export class AddCategoryScene extends AScene {
   getScene(): WizardScene<IBotContext> {
@@ -53,15 +57,25 @@ export class AddCategoryScene extends AScene {
 
   private async setType(ctx: IBotContext) {
     try {
-      if (ctx.text === CANCEL_TEXT) {
+      const messageText = ctx.text!
+
+      if (messageText === CANCEL_TEXT) {
         await ctx.replyWithHTML(CATEGORIES_CANCEL_TEXT, Markup.removeKeyboard())
         return await ctx.scene.leave()
+      }
+
+      if (!ValidatorHelper.isCorrectCategoryType(messageText)) {
+        await ctx.replyWithHTML(
+          NOT_EXIST_CATEGORY,
+          CategoiriesKeyboard.getType()
+        )
+        return await ctx.wizard.selectStep(1)
       }
 
       ctx.scene.session.state.createCategory.userId = new UserHelper(
         ctx
       ).getId()
-      ctx.scene.session.state.createCategory.type = ctx.text!
+      ctx.scene.session.state.createCategory.type = messageText
 
       await ctx.replyWithHTML(
         CATEGORIES_INPUT_NAME,
@@ -75,12 +89,34 @@ export class AddCategoryScene extends AScene {
 
   private async setName(ctx: IBotContext) {
     try {
-      if (ctx.text === CANCEL_TEXT) {
+      const messageText = ctx.text!
+
+      if (messageText === CANCEL_TEXT) {
         await ctx.replyWithHTML(CATEGORIES_CANCEL_TEXT, Markup.removeKeyboard())
         return await ctx.scene.leave()
       }
 
-      ctx.scene.session.state.createCategory.title = ctx.text!
+      if (!ValidatorHelper.isCorrectStringLength(messageText)) {
+        await ctx.replyWithHTML(
+          ValidatorMessage.getNotCorrectStringLength(),
+          CategoiriesKeyboard.getCancel()
+        )
+        return await ctx.wizard.selectStep(2)
+      }
+
+      if (ValidatorHelper.isStringNumber(messageText)) {
+        await ctx.replyWithHTML(
+          IS_TEXT_NOT_NUMBER,
+          CategoiriesKeyboard.getCancel()
+        )
+        return await ctx.wizard.selectStep(2)
+      }
+
+      if (ValidatorHelper.isStringNumber(messageText)) {
+        return await ctx.wizard.selectStep(2)
+      }
+
+      ctx.scene.session.state.createCategory.title = messageText
 
       await AsyncMessage.sendWithProgress(
         async () => {
