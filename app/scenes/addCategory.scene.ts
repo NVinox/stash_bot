@@ -2,12 +2,14 @@ import { Markup, Scenes } from "telegraf"
 import { WizardScene } from "telegraf/typings/scenes"
 import { AScene } from "../abstract/scene.abstract"
 import { IBotContext } from "../context/context.interface"
+import { AsyncMessage } from "../helpers/asyncMessage.helper"
 import { ErrorHelper } from "../helpers/errors.helper"
 import { UserHelper } from "../helpers/user.helper"
 import { CategoiriesKeyboard } from "../buttons/keyboards/categories.keyboard"
 import { CategoryService } from "../services/category.service"
 import { CategoriesMessage } from "../messages/commands/categories.message"
 import {
+  ADD_CATEGORIES_PROGRESS_TEXT,
   ADD_CATEGORY_SCENE_ID,
   CATEGORIES_CANCEL_TEXT,
   CATEGORIES_INPUT_NAME,
@@ -80,11 +82,17 @@ export class AddCategoryScene extends AScene {
 
       ctx.scene.session.state.createCategory.title = ctx.text!
 
-      await CategoryService.createCategory({
-        userId: ctx.scene.session.state.createCategory.userId,
-        type: ctx.scene.session.state.createCategory.type,
-        title: ctx.scene.session.state.createCategory.title,
-      })
+      await AsyncMessage.sendWithProgress(
+        async () => {
+          await CategoryService.createCategory({
+            userId: ctx.scene.session.state.createCategory.userId,
+            type: ctx.scene.session.state.createCategory.type,
+            title: ctx.scene.session.state.createCategory.title,
+          })
+        },
+        ctx,
+        ADD_CATEGORIES_PROGRESS_TEXT
+      )
 
       await ctx.replyWithHTML(
         CategoriesMessage.getSuccessCreateCategoryMessage(
