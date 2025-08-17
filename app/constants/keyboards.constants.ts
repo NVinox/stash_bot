@@ -19,3 +19,5 @@ export const DELETE_CATEGORY = `Удалить ${EMOJI_STOP}`
 export const ADD_CATEGORY = `Добавить ${EMOJI_PLUS}`
 export const CATEGORY_TYPE_EXPENSES = "Расходы"
 export const CATEGORY_TYPE_INCOME = "Доходы"
+
+export const CANCEL_TEXT = `Отмена ${EMOJI_STOP}`

@@ -7,6 +7,7 @@ import {
   DELETE_CATEGORY,
   CATEGORY_TYPE_INCOME,
   CATEGORY_TYPE_EXPENSES,
+  CANCEL_TEXT,
 } from "../../constants/keyboards.constants"
 
 export class CategoiriesKeyboard {
@@ -17,8 +18,15 @@ export class CategoiriesKeyboard {
   }
 
   static getType(): Markup.Markup<ReplyKeyboardMarkup> {
-    return Markup.keyboard([[CATEGORY_TYPE_EXPENSES, CATEGORY_TYPE_INCOME]])
+    return Markup.keyboard([
+      [CATEGORY_TYPE_EXPENSES, CATEGORY_TYPE_INCOME],
+      [CANCEL_TEXT],
+    ])
       .resize(true)
       .oneTime(true)
+  }
+
+  static getCancel(): Markup.Markup<ReplyKeyboardMarkup> {
+    return Markup.keyboard([CANCEL_TEXT]).resize(true).oneTime(true)
   }
 }

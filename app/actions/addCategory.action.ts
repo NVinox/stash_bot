@@ -11,14 +11,12 @@ export class AddCategoryAction extends Command {
   }
 
   handle(): void {
-    this.bot.on("text", this.handleAction)
+    this.bot.hears(ADD_CATEGORY, this.handleAction)
   }
 
   private async handleAction(ctx: IBotContext) {
     try {
-      if (ctx.text === ADD_CATEGORY) {
-        return await ctx.scene.enter(ADD_CATEGORY_SCENE_ID)
-      }
+      return await ctx.scene.enter(ADD_CATEGORY_SCENE_ID)
     } catch (error: unknown) {
       await new ErrorHelper().sendInternalError(ctx, error)
     }
