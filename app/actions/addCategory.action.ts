@@ -1,23 +1,22 @@
 import { Telegraf } from "telegraf"
 import { Command } from "../abstract/command.abstract"
 import { IBotContext } from "../context/context.interface"
-import { HelpMessage } from "../messages/commands/help.message"
 import { ErrorHelper } from "../helpers/errors.helper"
+import { ADD_CATEGORY } from "../constants/keyboards.constants"
+import { ADD_CATEGORY_SCENE_ID } from "../constants/scenes.constants"
 
-export class HelpCommand extends Command {
+export class AddCategoryAction extends Command {
   constructor(bot: Telegraf<IBotContext>) {
     super(bot)
   }
 
   handle(): void {
-    this.bot.help(this.sendCommandMessage)
+    this.bot.hears(ADD_CATEGORY, this.handleAction)
   }
 
-  private async sendCommandMessage(ctx: IBotContext) {
+  private async handleAction(ctx: IBotContext) {
     try {
-      return await ctx.reply(new HelpMessage().getHTML(), {
-        parse_mode: "HTML",
-      })
+      return await ctx.scene.enter(ADD_CATEGORY_SCENE_ID)
     } catch (error: unknown) {
       await new ErrorHelper().sendInternalError(ctx, error)
     }

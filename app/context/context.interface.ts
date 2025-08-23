@@ -1,9 +1,9 @@
 import { Context, Scenes } from "telegraf"
 import { SceneSessionData } from "telegraf/typings/scenes"
+import { ICreateCategory } from "../interfaces/category.interface"
 
 interface WizardSceneSessionData extends SceneSessionData {
-  categoryType?: string
-  categoryName?: string
+  createCategory: ICreateCategory
 }
 
 interface ISession extends Scenes.WizardSessionData {

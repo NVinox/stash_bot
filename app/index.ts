@@ -5,27 +5,30 @@ import { IConfigService } from "./config/config.interface"
 
 import { ConfigService } from "./config/config.service"
 
-import { Command } from "./commands/command.class"
+import { Command } from "./abstract/command.abstract"
 import { StartCommand } from "./commands/start.command"
 import { HelpCommand } from "./commands/help.command"
 import { ReportCommand } from "./commands/report.command"
 import { CategoriesCommand } from "./commands/categories.command"
 import { OperationCommand } from "./commands/operation.command"
 
+import { AddCategoryScene } from "./scenes/addCategory.scene"
+
 import { CommandsButtons } from "./buttons/commands/commands.buttons"
-import { CotegoriesScene } from "./scenes/categories.scene"
 
 import { DatabaseConnection } from "./database/connecttion.database"
+import { AddCategoryAction } from "./actions/addCategory.action"
 
 class Bot {
   private stage: Scenes.Stage<IBotContext, Scenes.SceneSessionData>
   bot: Telegraf<IBotContext>
   commands: Command[] = []
+  textActions: Command[] = []
 
   constructor(private readonly configService: IConfigService) {
     this.bot = new Telegraf<IBotContext>(this.configService.get("TOKEN"))
     this.stage = new Scenes.Stage<IBotContext>([
-      new CotegoriesScene().getScene(),
+      new AddCategoryScene().getScene(),
     ])
 
     this.bot.use(session())
@@ -35,6 +38,7 @@ class Bot {
 
   init() {
     this.setCommands()
+    this.setTextActions()
   }
 
   private setCommands() {
@@ -50,6 +54,14 @@ class Bot {
 
     for (const command of this.commands) {
       command.handle()
+    }
+  }
+
+  private setTextActions() {
+    this.textActions = [new AddCategoryAction(this.bot)]
+
+    for (const action of this.textActions) {
+      action.handle()
     }
   }
 }

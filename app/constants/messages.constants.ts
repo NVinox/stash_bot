@@ -20,3 +20,6 @@ export const HELP_SECOND_LINE = `<a>/${OPERATION_COMMAND_TEXT}</a> - запис�
 export const HELP_THIRD_LINE = `<a>/${CATEGORIES_COMMAND_TEXT}</a> - добавить категорию доходов/расходов.\nКоманда служит для создания категории дохода/расхода, к которой вы сможете записать транзакцию.`
 export const HELP_FOURTH_LINE = `<a>/${REPORT_COMMAND_TEXT}</a> - вывести отчет.\nКоманда служит для вывода наглядного отчета передвижения ваших денежных средств.`
 export const HELP_FINAL_LINE = "Желаем вам приятного пользования!"
+
+export const CATEGORY_INCOME_TEXT = "Категории доходов"
+export const CATEGORY_EXPENSES_TEXT = "Категории расходов"

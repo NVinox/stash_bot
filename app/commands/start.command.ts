@@ -1,5 +1,5 @@
 import { Telegraf } from "telegraf"
-import { Command } from "./command.class"
+import { Command } from "../abstract/command.abstract"
 import { IBotContext } from "../context/context.interface"
 import { StartMessage } from "../messages/commands/start.message"
 import { ErrorHelper } from "../helpers/errors.helper"
