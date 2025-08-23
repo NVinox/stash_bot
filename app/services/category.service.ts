@@ -10,15 +10,16 @@ import {
 } from "../constants/messages.constants"
 
 export class CategoryService {
-  //TODO: разделить метод на раздельное создание категорий дохода и расхода
-  static async createCategory(category: ICreateCategory): Promise<void> {
+  static async createCategory(
+    category: ICreateCategory
+  ): Promise<CategoryExpense | CategoryIncome> {
     const { type, userId } = category
     const title = StringHelper.capitalizeFirstLetter(category.title)
 
     if (type === CATEGORY_TYPE_EXPENSES) {
-      await CategoryExpense.create({ title, userId })
+      return await CategoryExpense.create({ title, userId })
     } else {
-      await CategoryIncome.create({ title, userId })
+      return await CategoryIncome.create({ title, userId })
     }
   }
 

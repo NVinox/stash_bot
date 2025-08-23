@@ -20,6 +20,8 @@ import {
 } from "../constants/scenes.constants"
 import { CANCEL_TEXT } from "../constants/keyboards.constants"
 import { IS_TEXT_NOT_NUMBER } from "../constants/validator.constants"
+import { CategoryExpense } from "../database/models/categoryExpense.model"
+import { CategoryIncome } from "../database/models/categoryIncome.model"
 
 export class AddCategoryScene extends AScene {
   getScene(): WizardScene<IBotContext> {
@@ -118,9 +120,11 @@ export class AddCategoryScene extends AScene {
 
       ctx.scene.session.state.createCategory.title = messageText
 
-      await AsyncMessage.sendWithProgress(
+      const createdCategory = await AsyncMessage.sendWithProgress<
+        CategoryExpense | CategoryIncome
+      >(
         async () => {
-          await CategoryService.createCategory({
+          return await CategoryService.createCategory({
             userId: ctx.scene.session.state.createCategory.userId,
             type: ctx.scene.session.state.createCategory.type,
             title: ctx.scene.session.state.createCategory.title,
@@ -132,7 +136,7 @@ export class AddCategoryScene extends AScene {
 
       await ctx.replyWithHTML(
         CategoriesMessage.getSuccessCreateCategoryMessage(
-          ctx.scene.session.state.createCategory.title
+          createdCategory.title
         ),
         Markup.removeKeyboard()
       )
