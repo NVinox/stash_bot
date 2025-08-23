@@ -7,8 +7,8 @@ export const CATEGORIES_START_MESSAGE = "Выберите тип категор�
 export const CATEGORIES_INPUT_NAME = "Назовите категорию:"
 export const CATEGORIES_CANCEL_TEXT = "Добавление категории отменено"
 export const CATEGORY_DELETE_CANCEL_TEXT = "Удаление категории отменено"
-export const CHANGE_CATEGORY_DELETE = "Выберите категорию для удаления:"
 export const ADD_CATEGORIES_PROGRESS_TEXT = "Создание категории..."
+export const GET_CATEGORIES_PROGRESS_TEXT = "Поиск категорий..."
 export const NOT_EXIST_CATEGORY =
   "Такой категории не существует, выберите категорию еще раз:"
 export const EXPENSES_CATEGORY_LIST = "Список категорий расходов:"

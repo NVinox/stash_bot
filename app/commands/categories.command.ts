@@ -3,10 +3,14 @@ import { Command } from "../abstract/command.abstract"
 import { IBotContext } from "../context/context.interface"
 import { UserHelper } from "../helpers/user.helper"
 import { ErrorHelper } from "../helpers/errors.helper"
+import { AsyncMessage } from "../helpers/asyncMessage.helper"
 import { CategoryService } from "../services/category.service"
 import { CategoiriesKeyboard } from "../buttons/keyboards/categories.keyboard"
-import { ADD_CATEGORY_SCENE_ID } from "../constants/scenes.constants"
 import { CATEGORIES_COMMAND_TEXT } from "../constants/commands.constants"
+import {
+  ADD_CATEGORY_SCENE_ID,
+  GET_CATEGORIES_PROGRESS_TEXT,
+} from "../constants/scenes.constants"
 
 export class CategoriesCommand extends Command {
   constructor(bot: Telegraf<IBotContext>) {
@@ -24,8 +28,14 @@ export class CategoriesCommand extends Command {
       )
 
       if (isHasCategories) {
-        const categoryMessage = await CategoryService.getUserCategories(
-          new UserHelper(ctx).getId()
+        const categoryMessage = await AsyncMessage.sendWithProgress<string>(
+          async () => {
+            return await CategoryService.getUserCategories(
+              new UserHelper(ctx).getId()
+            )
+          },
+          ctx,
+          GET_CATEGORIES_PROGRESS_TEXT
         )
         return await ctx.replyWithHTML(
           categoryMessage,

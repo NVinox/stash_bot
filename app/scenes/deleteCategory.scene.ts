@@ -1,4 +1,6 @@
 import { Markup, Scenes } from "telegraf"
+import { Markup as Markups } from "telegraf/typings/markup"
+import { InlineKeyboardMarkup } from "telegraf/typings/core/types/typegram"
 import { WizardScene } from "telegraf/typings/scenes"
 import { AScene } from "../abstract/scene.abstract"
 import { UserHelper } from "../helpers/user.helper"
@@ -10,9 +12,9 @@ import { CategoryService } from "../services/category.service"
 import {
   CATEGORIES_START_MESSAGE,
   CATEGORY_DELETE_CANCEL_TEXT,
-  CHANGE_CATEGORY_DELETE,
   DELETE_CATEGORY_SCENE_ID,
   EXPENSES_CATEGORY_LIST,
+  GET_CATEGORIES_PROGRESS_TEXT,
   INCOME_CATEGORY_LIST,
   NOT_EXIST_CATEGORY,
 } from "../constants/scenes.constants"
@@ -20,6 +22,7 @@ import {
   CANCEL_TEXT,
   CATEGORY_TYPE_INCOME,
 } from "../constants/keyboards.constants"
+import { AsyncMessage } from "../helpers/asyncMessage.helper"
 
 export class DeleteCategoryScene extends AScene {
   getScene(): WizardScene<IBotContext> {
@@ -64,23 +67,35 @@ export class DeleteCategoryScene extends AScene {
           NOT_EXIST_CATEGORY,
           CategoiriesKeyboard.getType()
         )
-        return await ctx.wizard.selectStep(1)
+        return await ctx.scene.reenter()
       }
 
-      await ctx.replyWithHTML(CHANGE_CATEGORY_DELETE, Markup.removeKeyboard())
-
       if (messageText === CATEGORY_TYPE_INCOME) {
-        const categoriesInlineMarkup =
-          await CategoryService.getUserIncomeCategoriesInline(
-            new UserHelper(ctx).getId()
-          )
+        const categoriesInlineMarkup = await AsyncMessage.sendWithProgress<
+          Markups<InlineKeyboardMarkup>
+        >(
+          async () => {
+            return await CategoryService.getUserIncomeCategoriesInline(
+              new UserHelper(ctx).getId()
+            )
+          },
+          ctx,
+          GET_CATEGORIES_PROGRESS_TEXT
+        )
 
         await ctx.replyWithHTML(INCOME_CATEGORY_LIST, categoriesInlineMarkup)
       } else {
-        const categoriesInlineMarkup =
-          await CategoryService.getUserExpenseCategoriesInline(
-            new UserHelper(ctx).getId()
-          )
+        const categoriesInlineMarkup = await AsyncMessage.sendWithProgress<
+          Markups<InlineKeyboardMarkup>
+        >(
+          async () => {
+            return await CategoryService.getUserExpenseCategoriesInline(
+              new UserHelper(ctx).getId()
+            )
+          },
+          ctx,
+          GET_CATEGORIES_PROGRESS_TEXT
+        )
 
         await ctx.replyWithHTML(EXPENSES_CATEGORY_LIST, categoriesInlineMarkup)
       }

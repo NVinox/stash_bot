@@ -38,8 +38,10 @@ export class CategoryService {
   static async getUserExpenseCategoriesInline(
     userId: number
   ): Promise<Markups<InlineKeyboardMarkup>> {
-    const categories = await CategoryExpense.findAll({ where: { userId } })
-    const inlineKeyboard = categories.reduce<
+    const categories = await CategoryExpense.findAndCountAll({
+      where: { userId },
+    })
+    const inlineKeyboard = categories.rows.reduce<
       InlineKeyboardButton.CallbackButton[][]
     >((acc, { id, title }) => {
       acc.push([Markup.button.callback(title, id.toString())])
@@ -59,8 +61,10 @@ export class CategoryService {
   static async getUserIncomeCategoriesInline(
     userId: number
   ): Promise<Markups<InlineKeyboardMarkup>> {
-    const categories = await CategoryIncome.findAll({ where: { userId } })
-    const inlineKeyboard = categories.reduce<
+    const categories = await CategoryIncome.findAndCountAll({
+      where: { userId },
+    })
+    const inlineKeyboard = categories.rows.reduce<
       InlineKeyboardButton.CallbackButton[][]
     >((acc, { id, title }) => {
       acc.push([Markup.button.callback(title, id.toString())])
