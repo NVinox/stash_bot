@@ -1,3 +1,9 @@
+import {
+  InlineKeyboardButton,
+  InlineKeyboardMarkup,
+} from "telegraf/typings/core/types/typegram"
+import { Markup } from "telegraf"
+import { Markup as Markups } from "telegraf/typings/markup"
 import { CategoryIncome } from "../database/models/categoryIncome.model"
 import { CategoryExpense } from "../database/models/categoryExpense.model"
 import { User } from "../database/models/user.model"
@@ -8,6 +14,12 @@ import {
   CATEGORY_EXPENSES_TEXT,
   CATEGORY_INCOME_TEXT,
 } from "../constants/messages.constants"
+import {
+  PAGINATE_END_ICON,
+  PAGINATE_NEXT_ICON,
+  PAGINATE_PREV_ICON,
+  PAGINATE_START_ICON,
+} from "../constants/emoji.constants"
 
 export class CategoryService {
   static async createCategory(
@@ -21,6 +33,48 @@ export class CategoryService {
     } else {
       return await CategoryIncome.create({ title, userId })
     }
+  }
+
+  static async getUserExpenseCategoriesInline(
+    userId: number
+  ): Promise<Markups<InlineKeyboardMarkup>> {
+    const categories = await CategoryExpense.findAll({ where: { userId } })
+    const inlineKeyboard = categories.reduce<
+      InlineKeyboardButton.CallbackButton[][]
+    >((acc, { id, title }) => {
+      acc.push([Markup.button.callback(title, id.toString())])
+      return acc
+    }, [])
+
+    inlineKeyboard.push([
+      Markup.button.callback(PAGINATE_START_ICON, "start"),
+      Markup.button.callback(PAGINATE_PREV_ICON, "prev"),
+      Markup.button.callback(PAGINATE_NEXT_ICON, "next"),
+      Markup.button.callback(PAGINATE_END_ICON, "end"),
+    ])
+
+    return Markup.inlineKeyboard(inlineKeyboard)
+  }
+
+  static async getUserIncomeCategoriesInline(
+    userId: number
+  ): Promise<Markups<InlineKeyboardMarkup>> {
+    const categories = await CategoryIncome.findAll({ where: { userId } })
+    const inlineKeyboard = categories.reduce<
+      InlineKeyboardButton.CallbackButton[][]
+    >((acc, { id, title }) => {
+      acc.push([Markup.button.callback(title, id.toString())])
+      return acc
+    }, [])
+
+    inlineKeyboard.push([
+      Markup.button.callback(PAGINATE_START_ICON, "start"),
+      Markup.button.callback(PAGINATE_PREV_ICON, "prev"),
+      Markup.button.callback(PAGINATE_NEXT_ICON, "next"),
+      Markup.button.callback(PAGINATE_END_ICON, "end"),
+    ])
+
+    return Markup.inlineKeyboard(inlineKeyboard)
   }
 
   static async getUserCategories(userId: number): Promise<string> {
