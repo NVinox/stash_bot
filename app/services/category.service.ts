@@ -23,37 +23,35 @@ export class CategoryService {
   }
 
   static async getUserCategories(userId: number): Promise<string> {
-    const user = await User.findByPk(userId, {
-      include: [CategoryIncome, CategoryExpense],
-    })
+    let message = ""
+    const categoriesIncome = (
+      await CategoryIncome.findAll({ where: { userId } })
+    )
+      .reduce<string[]>((acc, category) => {
+        acc.push(category.title)
+        return acc
+      }, [])
+      .join(", ")
+    const categoriesExpense = (
+      await CategoryExpense.findAll({
+        where: { userId },
+      })
+    )
+      .reduce<string[]>((acc, category) => {
+        acc.push(category.title)
+        return acc
+      }, [])
+      .join(", ")
 
-    if (user) {
-      let message = ""
-      const categoriesIncome = user.categoriesIncome
-        .reduce<string[]>((acc, category) => {
-          acc.push(category.title)
-          return acc
-        }, [])
-        .join(", ")
-      const categoriesExpense = user.categoriesExpense
-        .reduce<string[]>((acc, category) => {
-          acc.push(category.title)
-          return acc
-        }, [])
-        .join(", ")
-
-      if (categoriesIncome) {
-        message += `${CATEGORY_INCOME_TEXT}:\n${categoriesIncome}\n\n`
-      }
-
-      if (categoriesExpense) {
-        message += `${CATEGORY_EXPENSES_TEXT}:\n${categoriesExpense}`
-      }
-
-      return message
+    if (categoriesIncome) {
+      message += `${CATEGORY_INCOME_TEXT}:\n${categoriesIncome}\n\n`
     }
 
-    return ""
+    if (categoriesExpense) {
+      message += `${CATEGORY_EXPENSES_TEXT}:\n${categoriesExpense}`
+    }
+
+    return message
   }
 
   static async isHasUserCategories(userId: number): Promise<boolean> {
