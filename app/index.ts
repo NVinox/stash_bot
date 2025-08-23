@@ -13,11 +13,14 @@ import { CategoriesCommand } from "./commands/categories.command"
 import { OperationCommand } from "./commands/operation.command"
 
 import { AddCategoryScene } from "./scenes/addCategory.scene"
+import { DeleteCategoryScene } from "./scenes/deleteCategory.scene"
 
 import { CommandsButtons } from "./buttons/commands/commands.buttons"
 
-import { DatabaseConnection } from "./database/connecttion.database"
+import { DeleteCategoryAction } from "./actions/deleteCategory.action"
 import { AddCategoryAction } from "./actions/addCategory.action"
+
+import { DatabaseConnection } from "./database/connecttion.database"
 
 class Bot {
   private stage: Scenes.Stage<IBotContext, Scenes.SceneSessionData>
@@ -29,6 +32,7 @@ class Bot {
     this.bot = new Telegraf<IBotContext>(this.configService.get("TOKEN"))
     this.stage = new Scenes.Stage<IBotContext>([
       new AddCategoryScene().getScene(),
+      new DeleteCategoryScene().getScene(),
     ])
 
     this.bot.use(session())
@@ -58,7 +62,10 @@ class Bot {
   }
 
   private setTextActions() {
-    this.textActions = [new AddCategoryAction(this.bot)]
+    this.textActions = [
+      new AddCategoryAction(this.bot),
+      new DeleteCategoryAction(this.bot),
+    ]
 
     for (const action of this.textActions) {
       action.handle()
