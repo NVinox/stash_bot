@@ -84,6 +84,22 @@ export class CategoryService {
     return message
   }
 
+  static async getIncomeCategory(id: number): Promise<CategoryIncome | null> {
+    return await CategoryIncome.findOne({ where: { id } })
+  }
+
+  static async getExpenseCategory(id: number): Promise<CategoryExpense | null> {
+    return await CategoryExpense.findOne({ where: { id } })
+  }
+
+  static async deleteIncomeCategory(id: number): Promise<void> {
+    await CategoryIncome.destroy({ where: { id } })
+  }
+
+  static async deleteExpenseCategory(id: number): Promise<void> {
+    await CategoryExpense.destroy({ where: { id } })
+  }
+
   static async isHasUserCategories(userId: number): Promise<boolean> {
     const user = await User.findByPk(userId, {
       include: [CategoryIncome, CategoryExpense],

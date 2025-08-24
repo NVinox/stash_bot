@@ -23,3 +23,11 @@ export const HELP_FINAL_LINE = "Желаем вам приятного поль�
 
 export const CATEGORY_INCOME_TEXT = "Категории доходов"
 export const CATEGORY_EXPENSES_TEXT = "Категории расходов"
+
+export const INCOME_CATEGORIES_NOT_EXIST = "Категорий дохода не существует"
+export const EXPENSES_CATEGORIES_NOT_EXIST = "Категорий расхода не существует"
+export const DELETE_INCOME_CATEGORY = "Выберите категорию дохода для удаления"
+export const DELETE_EXPENSES_CATEGORY =
+  "Выберите категорию расхода для удаления"
+export const CATEGORY_NOT_EXIST_DELETED =
+  "Категория не существует или была удалена"

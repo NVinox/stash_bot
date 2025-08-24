@@ -7,33 +7,52 @@ import { UserHelper } from "../helpers/user.helper"
 import { ErrorHelper } from "../helpers/errors.helper"
 import { ValidatorHelper } from "../helpers/validator.helper"
 import { AsyncMessage } from "../helpers/asyncMessage.helper"
+import { PaginatiorHelper } from "../helpers/paginator.helper"
+import { StringHelper } from "../helpers/string.helper"
 
 import { IBotContext } from "../context/context.interface"
 import { IModelWithPaginate } from "../interfaces/pagination.interface"
 
 import { CategoiriesKeyboard } from "../buttons/keyboards/categories.keyboard"
-import { DeleteCategoryButton } from "../buttons/callbacks/deleteCategory.buttons"
 
 import { CategoryService } from "../services/category.service"
 
 import { CategoryIncome } from "../database/models/categoryIncome.model"
 import { CategoryExpense } from "../database/models/categoryExpense.model"
 
+import { PaginationCategoriesIncomeCallback } from "../callbacks/paginationCategoriesIncome.callback"
+import { DeleteIncomeCategoryCallback } from "../callbacks/deleteIncomeCategory.callback"
+import { PaginationCategoriesExpensesCallback } from "../callbacks/paginationCategoriesExpenses.callback"
+import { DeleteExpensesCategoryCallback } from "../callbacks/deleteExpensesCategory.callback"
+
+import { PaginationButtons } from "../buttons/callbacks/pagination.buttons"
+import { CategoriesList } from "../buttons/callbacks/categoriesList.buttons"
+
 import {
   NOT_EXIST_CATEGORY,
-  INCOME_CATEGORY_LIST,
-  EXPENSES_CATEGORY_LIST,
   DELETE_CATEGORY_SCENE_ID,
   CATEGORIES_START_MESSAGE,
   CATEGORY_DELETE_CANCEL_TEXT,
   GET_CATEGORIES_PROGRESS_TEXT,
 } from "../constants/scenes.constants"
 import {
+  END_PREFIX,
+  NEXT_PREFIX,
+  PREV_PREFIX,
+  START_PREFIX,
+  DELETE_CATEGORY_INCOME_PREFIX,
+  DELETE_CATEGORY_EXPENSES_PREFIX,
+} from "../constants/callback.constants"
+import {
   CANCEL_TEXT,
   CATEGORY_TYPE_INCOME,
 } from "../constants/keyboards.constants"
-import { PaginatiorHelper } from "../helpers/paginator.helper"
-import { CategoriesCallback } from "../callbacks/categories.callback"
+import {
+  DELETE_EXPENSES_CATEGORY,
+  DELETE_INCOME_CATEGORY,
+  EXPENSES_CATEGORIES_NOT_EXIST,
+  INCOME_CATEGORIES_NOT_EXIST,
+} from "../constants/messages.constants"
 
 export class DeleteCategoryScene extends AScene {
   constructor(public bot: Telegraf<IBotContext>) {
@@ -68,6 +87,7 @@ export class DeleteCategoryScene extends AScene {
   private async setType(ctx: IBotContext) {
     try {
       const messageText = ctx.text!
+      const messageId = String(ctx.message?.message_id)
 
       if (messageText === CANCEL_TEXT) {
         await ctx.replyWithHTML(
@@ -97,20 +117,52 @@ export class DeleteCategoryScene extends AScene {
           ctx,
           GET_CATEGORIES_PROGRESS_TEXT
         )
-        const inlineButtons = DeleteCategoryButton.getButtons(
-          categories,
-          String(ctx.message?.message_id),
-          categories.count
+
+        if (!categories.count) {
+          return await ctx.replyWithHTML(INCOME_CATEGORIES_NOT_EXIST)
+        }
+
+        const paginationCallbacks = new PaginationButtons(
+          StringHelper.generateCallbackData(START_PREFIX, messageId),
+          StringHelper.generateCallbackData(PREV_PREFIX, messageId),
+          StringHelper.generateCallbackData(NEXT_PREFIX, messageId),
+          StringHelper.generateCallbackData(END_PREFIX, messageId)
+        ).getButtons(0, categories.count)
+        const categoryCallbacks = CategoriesList.getList(
+          categories.rows,
+          DELETE_CATEGORY_INCOME_PREFIX
         )
 
-        new CategoriesCallback(
+        new PaginationCategoriesIncomeCallback(
           this.bot,
           new PaginatiorHelper(categories.count),
-          String(ctx.message?.message_id),
+          messageId,
           new UserHelper(ctx).getId()
         ).init()
 
-        await ctx.replyWithHTML(INCOME_CATEGORY_LIST, inlineButtons)
+        new DeleteIncomeCategoryCallback(
+          this.bot,
+          categories.rows.reduce<string[]>((acc, { id }) => {
+            acc.push(
+              StringHelper.generateCallbackData(
+                DELETE_CATEGORY_INCOME_PREFIX,
+                id.toString()
+              )
+            )
+            return acc
+          }, [])
+        ).deleteInit()
+
+        await ctx.replyWithHTML(DELETE_INCOME_CATEGORY, {
+          reply_markup: {
+            inline_keyboard: [
+              ...Markup.inlineKeyboard(categoryCallbacks).reply_markup
+                .inline_keyboard,
+              ...Markup.inlineKeyboard(paginationCallbacks).reply_markup
+                .inline_keyboard,
+            ],
+          },
+        })
       } else {
         const categories = await AsyncMessage.sendWithProgress<
           IModelWithPaginate<CategoryExpense[]>
@@ -123,20 +175,52 @@ export class DeleteCategoryScene extends AScene {
           ctx,
           GET_CATEGORIES_PROGRESS_TEXT
         )
-        const inlineButtons = DeleteCategoryButton.getButtons(
-          categories,
-          String(ctx.message?.message_id),
-          categories.count
+
+        if (!categories.count) {
+          return await ctx.replyWithHTML(EXPENSES_CATEGORIES_NOT_EXIST)
+        }
+
+        const paginationCallbacks = new PaginationButtons(
+          StringHelper.generateCallbackData(START_PREFIX, messageId),
+          StringHelper.generateCallbackData(PREV_PREFIX, messageId),
+          StringHelper.generateCallbackData(NEXT_PREFIX, messageId),
+          StringHelper.generateCallbackData(END_PREFIX, messageId)
+        ).getButtons(0, categories.count)
+        const categoryCallbacks = CategoriesList.getList(
+          categories.rows,
+          DELETE_CATEGORY_EXPENSES_PREFIX
         )
 
-        new CategoriesCallback(
+        new PaginationCategoriesExpensesCallback(
           this.bot,
           new PaginatiorHelper(categories.count),
-          String(ctx.message?.message_id),
+          messageId,
           new UserHelper(ctx).getId()
         ).init()
 
-        await ctx.replyWithHTML(EXPENSES_CATEGORY_LIST, inlineButtons)
+        new DeleteExpensesCategoryCallback(
+          this.bot,
+          categories.rows.reduce<string[]>((acc, { id }) => {
+            acc.push(
+              StringHelper.generateCallbackData(
+                DELETE_CATEGORY_EXPENSES_PREFIX,
+                id.toString()
+              )
+            )
+            return acc
+          }, [])
+        ).deleteInit()
+
+        await ctx.replyWithHTML(DELETE_EXPENSES_CATEGORY, {
+          reply_markup: {
+            inline_keyboard: [
+              ...Markup.inlineKeyboard(categoryCallbacks).reply_markup
+                .inline_keyboard,
+              ...Markup.inlineKeyboard(paginationCallbacks).reply_markup
+                .inline_keyboard,
+            ],
+          },
+        })
       }
 
       return await ctx.scene.leave()
