@@ -22,6 +22,7 @@ import {
   START_PREFIX,
   DELETE_CATEGORY_EXPENSES_PREFIX,
 } from "../constants/callback.constants"
+import { EXPENSES_CATEGORIES_NOT_EXIST } from "../constants/messages.constants"
 
 export class PaginationCategoriesExpensesCallback extends APaginationCallback {
   constructor(
@@ -75,6 +76,14 @@ export class PaginationCategoriesExpensesCallback extends APaginationCallback {
         this.userId,
         this.paginator.offset
       )
+
+      if (!categories.count) {
+        return await ctx.editMessageText(
+          EXPENSES_CATEGORIES_NOT_EXIST,
+          Markup.inlineKeyboard([])
+        )
+      }
+
       const paginationCallbacks = new PaginationButtons(
         StringHelper.generateCallbackData(START_PREFIX, this.messageId),
         StringHelper.generateCallbackData(PREV_PREFIX, this.messageId),
@@ -119,6 +128,14 @@ export class PaginationCategoriesExpensesCallback extends APaginationCallback {
         this.userId,
         this.paginator.offset
       )
+
+      if (!categories.count) {
+        return await ctx.editMessageText(
+          EXPENSES_CATEGORIES_NOT_EXIST,
+          Markup.inlineKeyboard([])
+        )
+      }
+
       const paginationCallbacks = new PaginationButtons(
         StringHelper.generateCallbackData(START_PREFIX, this.messageId),
         StringHelper.generateCallbackData(PREV_PREFIX, this.messageId),
@@ -163,6 +180,14 @@ export class PaginationCategoriesExpensesCallback extends APaginationCallback {
         this.userId,
         this.paginator.offset
       )
+
+      if (!categories.count) {
+        return await ctx.editMessageText(
+          EXPENSES_CATEGORIES_NOT_EXIST,
+          Markup.inlineKeyboard([])
+        )
+      }
+
       const paginationCallbacks = new PaginationButtons(
         StringHelper.generateCallbackData(START_PREFIX, this.messageId),
         StringHelper.generateCallbackData(PREV_PREFIX, this.messageId),
@@ -207,6 +232,14 @@ export class PaginationCategoriesExpensesCallback extends APaginationCallback {
         this.userId,
         this.paginator.offset
       )
+
+      if (!categories.count) {
+        return await ctx.editMessageText(
+          EXPENSES_CATEGORIES_NOT_EXIST,
+          Markup.inlineKeyboard([])
+        )
+      }
+
       const paginationCallbacks = new PaginationButtons(
         StringHelper.generateCallbackData(START_PREFIX, this.messageId),
         StringHelper.generateCallbackData(PREV_PREFIX, this.messageId),

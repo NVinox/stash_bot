@@ -22,6 +22,7 @@ import {
   PREV_PREFIX,
   START_PREFIX,
 } from "../constants/callback.constants"
+import { INCOME_CATEGORIES_NOT_EXIST } from "../constants/messages.constants"
 
 export class PaginationCategoriesIncomeCallback extends APaginationCallback {
   constructor(
@@ -75,6 +76,14 @@ export class PaginationCategoriesIncomeCallback extends APaginationCallback {
         this.userId,
         this.paginator.offset
       )
+
+      if (!categories.count) {
+        return await ctx.editMessageText(
+          INCOME_CATEGORIES_NOT_EXIST,
+          Markup.inlineKeyboard([])
+        )
+      }
+
       const paginationCallbacks = new PaginationButtons(
         StringHelper.generateCallbackData(START_PREFIX, this.messageId),
         StringHelper.generateCallbackData(PREV_PREFIX, this.messageId),
@@ -119,6 +128,14 @@ export class PaginationCategoriesIncomeCallback extends APaginationCallback {
         this.userId,
         this.paginator.offset
       )
+
+      if (!categories.count) {
+        return await ctx.editMessageText(
+          INCOME_CATEGORIES_NOT_EXIST,
+          Markup.inlineKeyboard([])
+        )
+      }
+
       const paginationCallbacks = new PaginationButtons(
         StringHelper.generateCallbackData(START_PREFIX, this.messageId),
         StringHelper.generateCallbackData(PREV_PREFIX, this.messageId),
@@ -163,6 +180,14 @@ export class PaginationCategoriesIncomeCallback extends APaginationCallback {
         this.userId,
         this.paginator.offset
       )
+
+      if (!categories.count) {
+        return await ctx.editMessageText(
+          INCOME_CATEGORIES_NOT_EXIST,
+          Markup.inlineKeyboard([])
+        )
+      }
+
       const paginationCallbacks = new PaginationButtons(
         StringHelper.generateCallbackData(START_PREFIX, this.messageId),
         StringHelper.generateCallbackData(PREV_PREFIX, this.messageId),
@@ -207,6 +232,14 @@ export class PaginationCategoriesIncomeCallback extends APaginationCallback {
         this.userId,
         this.paginator.offset
       )
+
+      if (!categories.count) {
+        return await ctx.editMessageText(
+          INCOME_CATEGORIES_NOT_EXIST,
+          Markup.inlineKeyboard([])
+        )
+      }
+
       const paginationCallbacks = new PaginationButtons(
         StringHelper.generateCallbackData(START_PREFIX, this.messageId),
         StringHelper.generateCallbackData(PREV_PREFIX, this.messageId),
