@@ -1,30 +1,45 @@
-import { Markup, Scenes } from "telegraf"
-import { Markup as Markups } from "telegraf/typings/markup"
-import { InlineKeyboardMarkup } from "telegraf/typings/core/types/typegram"
+import { Markup, Scenes, Telegraf } from "telegraf"
 import { WizardScene } from "telegraf/typings/scenes"
+
 import { AScene } from "../abstract/scene.abstract"
+
 import { UserHelper } from "../helpers/user.helper"
 import { ErrorHelper } from "../helpers/errors.helper"
 import { ValidatorHelper } from "../helpers/validator.helper"
+import { AsyncMessage } from "../helpers/asyncMessage.helper"
+
 import { IBotContext } from "../context/context.interface"
+import { IModelWithPaginate } from "../interfaces/pagination.interface"
+
 import { CategoiriesKeyboard } from "../buttons/keyboards/categories.keyboard"
+import { DeleteCategoryButton } from "../buttons/callbacks/deleteCategory.buttons"
+
 import { CategoryService } from "../services/category.service"
+
+import { CategoryIncome } from "../database/models/categoryIncome.model"
+import { CategoryExpense } from "../database/models/categoryExpense.model"
+
 import {
+  NOT_EXIST_CATEGORY,
+  INCOME_CATEGORY_LIST,
+  EXPENSES_CATEGORY_LIST,
+  DELETE_CATEGORY_SCENE_ID,
   CATEGORIES_START_MESSAGE,
   CATEGORY_DELETE_CANCEL_TEXT,
-  DELETE_CATEGORY_SCENE_ID,
-  EXPENSES_CATEGORY_LIST,
   GET_CATEGORIES_PROGRESS_TEXT,
-  INCOME_CATEGORY_LIST,
-  NOT_EXIST_CATEGORY,
 } from "../constants/scenes.constants"
 import {
   CANCEL_TEXT,
   CATEGORY_TYPE_INCOME,
 } from "../constants/keyboards.constants"
-import { AsyncMessage } from "../helpers/asyncMessage.helper"
+import { PaginatiorHelper } from "../helpers/paginator.helper"
+import { CategoriesCallback } from "../callbacks/categories.callback"
 
 export class DeleteCategoryScene extends AScene {
+  constructor(public bot: Telegraf<IBotContext>) {
+    super()
+  }
+
   getScene(): WizardScene<IBotContext> {
     return new Scenes.WizardScene<IBotContext>(
       DELETE_CATEGORY_SCENE_ID,
@@ -71,33 +86,57 @@ export class DeleteCategoryScene extends AScene {
       }
 
       if (messageText === CATEGORY_TYPE_INCOME) {
-        const categoriesInlineMarkup = await AsyncMessage.sendWithProgress<
-          Markups<InlineKeyboardMarkup>
+        const categories = await AsyncMessage.sendWithProgress<
+          IModelWithPaginate<CategoryIncome[]>
         >(
           async () => {
-            return await CategoryService.getUserIncomeCategoriesInline(
+            return await CategoryService.getIncomeCategories(
               new UserHelper(ctx).getId()
             )
           },
           ctx,
           GET_CATEGORIES_PROGRESS_TEXT
         )
+        const inlineButtons = DeleteCategoryButton.getButtons(
+          categories,
+          String(ctx.message?.message_id),
+          categories.count
+        )
 
-        await ctx.replyWithHTML(INCOME_CATEGORY_LIST, categoriesInlineMarkup)
+        new CategoriesCallback(
+          this.bot,
+          new PaginatiorHelper(categories.count),
+          String(ctx.message?.message_id),
+          new UserHelper(ctx).getId()
+        ).init()
+
+        await ctx.replyWithHTML(INCOME_CATEGORY_LIST, inlineButtons)
       } else {
-        const categoriesInlineMarkup = await AsyncMessage.sendWithProgress<
-          Markups<InlineKeyboardMarkup>
+        const categories = await AsyncMessage.sendWithProgress<
+          IModelWithPaginate<CategoryExpense[]>
         >(
           async () => {
-            return await CategoryService.getUserExpenseCategoriesInline(
+            return await CategoryService.getExpenseCategories(
               new UserHelper(ctx).getId()
             )
           },
           ctx,
           GET_CATEGORIES_PROGRESS_TEXT
         )
+        const inlineButtons = DeleteCategoryButton.getButtons(
+          categories,
+          String(ctx.message?.message_id),
+          categories.count
+        )
 
-        await ctx.replyWithHTML(EXPENSES_CATEGORY_LIST, categoriesInlineMarkup)
+        new CategoriesCallback(
+          this.bot,
+          new PaginatiorHelper(categories.count),
+          String(ctx.message?.message_id),
+          new UserHelper(ctx).getId()
+        ).init()
+
+        await ctx.replyWithHTML(EXPENSES_CATEGORY_LIST, inlineButtons)
       }
 
       return await ctx.scene.leave()

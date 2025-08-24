@@ -32,7 +32,7 @@ class Bot {
     this.bot = new Telegraf<IBotContext>(this.configService.get("TOKEN"))
     this.stage = new Scenes.Stage<IBotContext>([
       new AddCategoryScene().getScene(),
-      new DeleteCategoryScene().getScene(),
+      new DeleteCategoryScene(this.bot).getScene(),
     ])
 
     this.bot.use(session())
